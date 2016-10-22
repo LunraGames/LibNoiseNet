@@ -24,8 +24,7 @@ using System;
 
 namespace LibNoise
 {
-    public class Perlin
-        : GradientNoiseBasis, IModule
+    public class Perlin : GradientNoiseBasis, IModule
     {
         public float Frequency { get; set; }
         public float Persistence { get; set; }
@@ -34,7 +33,7 @@ namespace LibNoise
         int mOctaveCount;
         public float Lacunarity { get; set; }
 
-        private const int MaxOctaves = 30;
+        const int MaxOctaves = 30;
 
         public Perlin()
         {
@@ -51,7 +50,6 @@ namespace LibNoise
             var value = 0f;
             var signal = 0f;
             var curPersistence = 1f;
-            //double nx, ny, nz;
             long seed;
 
             x *= Frequency;
@@ -61,12 +59,8 @@ namespace LibNoise
             for(int currentOctave = 0; currentOctave < OctaveCount; currentOctave++)
             {
                 seed = (Seed + currentOctave) & 0xffffffff;
-                /*nx = Math.MakeInt32Range(x);
-                ny = Math.MakeInt32Range(y);
-                nz = Math.MakeInt32Range(z);*/
                 signal = GradientCoherentNoise(x, y, z, (int)seed, NoiseQuality);
-                //signal = cachedNoise3(x, y, z);
-
+                
                 value += signal * curPersistence;
 
                 x *= Lacunarity;

@@ -20,7 +20,6 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 
-using System;
 using UnityEngine;
 
 namespace LibNoise
@@ -40,14 +39,11 @@ namespace LibNoise
             {
                 return lowerBound;
             }
-            else if (value > upperBound)
+            if (value > upperBound)
             {
                 return upperBound;
             }
-            else
-            {
-                return value;
-            }
+            return value;
         }
 
         /// <summary>
@@ -101,25 +97,6 @@ namespace LibNoise
         {
             return ((1f - a) * n0) + (a * n1);
         }
-
-        /// <summary>
-        /// Returns the given value, modified to be able to fit into a 32-bit integer.
-        /// </summary>
-        /*public double MakeInt32Range(double n)
-        {
-            if (n >= 1073741824.0)
-            {
-                return ((2.0 * System.Math.IEEERemainder(n, 1073741824.0)) - 1073741824.0);
-            }
-            else if (n <= -1073741824.0)
-            {
-                return ((2.0 * System.Math.IEEERemainder(n, 1073741824.0)) + 1073741824.0);
-            }
-            else
-            {
-                return n;
-            }
-        }*/
 
         /// <summary>
         /// Returns the given value mapped onto a cubic S-curve.

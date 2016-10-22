@@ -18,20 +18,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-// 
-
-using System;
+//
 
 namespace LibNoise
 {
-    public class GradientNoiseBasis
-        : Math
+    public class GradientNoiseBasis : Math
     {
-        private const int XNoiseGen = 1619;
-        private const int YNoiseGen = 31337;
-        private const int ZNoiseGen = 6971;
-        private const int SeedNoiseGen = 1013;
-        private const int ShiftNoiseGen = 8;
+        const int XNoiseGen = 1619;
+        const int YNoiseGen = 31337;
+        const int ZNoiseGen = 6971;
+        const int SeedNoiseGen = 1013;
+        const int ShiftNoiseGen = 8;
 
         static float[] RandomVectors = 
         {
@@ -296,11 +293,11 @@ namespace LibNoise
         public float GradientCoherentNoise(float x, float y, float z, int seed,
             NoiseQuality noiseQuality)
         {
-            int x0 = (x > 0.0 ? (int)x : (int)x - 1);
+            int x0 = (x > 0f ? (int)x : (int)x - 1);
             int x1 = x0 + 1;
-            int y0 = (y > 0.0 ? (int)y : (int)y - 1);
+            int y0 = (y > 0f ? (int)y : (int)y - 1);
             int y1 = y0 + 1;
-            int z0 = (z > 0.0 ? (int)z : (int)z - 1);
+            int z0 = (z > 0f ? (int)z : (int)z - 1);
             int z1 = z0 + 1;
 
             float xs = 0f, ys = 0f, zs = 0f;
@@ -343,28 +340,21 @@ namespace LibNoise
             return LinearInterpolate(iy0, iy1, zs);
         }
 
-        float GradientNoise(float fx, float fy, float fz, int ix, int iy, int iz, long seed)
-        {
-            long vectorIndex = (
-                  XNoiseGen * ix
-                + YNoiseGen * iy
-                + ZNoiseGen * iz
-                + SeedNoiseGen * seed)
-                & 0xffffffff;
-            vectorIndex ^= (vectorIndex >> ShiftNoiseGen);
-            vectorIndex &= 0xff;
+		float GradientNoise(float fx, float fy, float fz, int ix, int iy, int iz, long seed)
+		{
+			long vectorIndex = (XNoiseGen * ix + YNoiseGen * iy + ZNoiseGen * iz + SeedNoiseGen * seed) & 0xffffffff;
+			vectorIndex ^= (vectorIndex >> ShiftNoiseGen);
+			vectorIndex &= 0xff;
 
-            var xvGradient = RandomVectors[(vectorIndex << 2)];
-            var yvGradient = RandomVectors[(vectorIndex << 2) + 1];
-            var zvGradient = RandomVectors[(vectorIndex << 2) + 2];
+			var xvGradient = RandomVectors[(vectorIndex << 2)];
+			var yvGradient = RandomVectors[(vectorIndex << 2) + 1];
+			var zvGradient = RandomVectors[(vectorIndex << 2) + 2];
 
-            var xvPoint = (fx - ix);
-            var yvPoint = (fy - iy);
-            var zvPoint = (fz - iz);
+			var xvPoint = (fx - ix);
+			var yvPoint = (fy - iy);
+			var zvPoint = (fz - iz);
 
-            return ((xvGradient * xvPoint)
-                + (yvGradient * yvPoint)
-                + (zvGradient * zvPoint)) * 2.12f;
-        }          
+			return ((xvGradient * xvPoint) + (yvGradient * yvPoint) + (zvGradient * zvPoint)) * 2.12f;
+		}
     }
 }

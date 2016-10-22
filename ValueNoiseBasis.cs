@@ -20,17 +20,15 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 
-using System;
-
 namespace LibNoise
 {
     public class ValueNoiseBasis        
     {
-        private const int XNoiseGen = 1619;
-        private const int YNoiseGen = 31337;
-        private const int ZNoiseGen = 6971;
-        private const int SeedNoiseGen = 1013;
-        private const int ShiftNoiseGen = 8;
+        const int XNoiseGen = 1619;
+        const int YNoiseGen = 31337;
+        const int ZNoiseGen = 6971;
+        const int SeedNoiseGen = 1013;
+        const int ShiftNoiseGen = 8;
 
         public int IntValueNoise(int x, int y, int z, int seed)
         {
@@ -53,8 +51,7 @@ namespace LibNoise
 
         public float ValueNoise(int x, int y, int z, int seed)
         {
-			// todo: check that this won't cause floating point issues...
-            return 1f - (IntValueNoise(x, y, z, seed) / 1073741824.0f);
+			return 1f - (IntValueNoise(x, y, z, seed) / 1073741824f);
         }     
     }
 }
