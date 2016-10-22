@@ -25,9 +25,9 @@ using System;
 namespace LibNoise.Modifiers
 {
     /// <summary>
-    /// Module that returns the output of two source modules added together.
+    /// Module that returns the output of two source modules subtracted from each other.
     /// </summary>
-    public class Add : IModule
+    public class Subtract : IModule
     {
         /// <summary>
         /// The first module from which to retrieve noise.
@@ -43,7 +43,7 @@ namespace LibNoise.Modifiers
         /// </summary>
         /// <param name="sourceModule1">The first module from which to retrieve noise.</param>
         /// <param name="sourceModule2">The second module from which to retrieve noise.</param>
-        public Add(IModule sourceModule1, IModule sourceModule2)
+        public Subtract(IModule sourceModule1, IModule sourceModule2)
         {
             if (sourceModule1 == null || sourceModule2 == null)
                 throw new ArgumentNullException("Source modules must be provided.");
@@ -60,7 +60,7 @@ namespace LibNoise.Modifiers
             if (SourceModule1 == null || SourceModule2 == null)
                 throw new NullReferenceException("Source modules must be provided.");
 
-            return SourceModule1.GetValue(x, y, z) + SourceModule2.GetValue(x, y, z);
+            return SourceModule1.GetValue(x, y, z) - SourceModule2.GetValue(x, y, z);
         }
     }
 }
