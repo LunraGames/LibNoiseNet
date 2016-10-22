@@ -27,36 +27,36 @@ namespace LibNoise
     public class Perlin
         : GradientNoiseBasis, IModule
     {
-        public double Frequency { get; set; }
-        public double Persistence { get; set; }
+        public float Frequency { get; set; }
+        public float Persistence { get; set; }
         public NoiseQuality NoiseQuality { get; set; }
         public int Seed { get; set; }
-        private int mOctaveCount;
-        public double Lacunarity { get; set; }
+        int mOctaveCount;
+        public float Lacunarity { get; set; }
 
         private const int MaxOctaves = 30;
 
         public Perlin()
         {
-            Frequency = 1.0;
-            Lacunarity = 2.0;
+            Frequency = 1f;
+            Lacunarity = 2f;
             OctaveCount = 6;
-            Persistence = 0.5;
+            Persistence = 0.5f;
             NoiseQuality = NoiseQuality.Standard;
             Seed = 0;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
-            double value = 0.0;
-            double signal = 0.0;
-            double curPersistence = 1.0;
+            var value = 0f;
+            var signal = 0f;
+            var curPersistence = 1f;
             //double nx, ny, nz;
             long seed;
 
-            x*=Frequency;
-            y*=Frequency;
-            z*=Frequency;
+            x *= Frequency;
+            y *= Frequency;
+            z *= Frequency;
 
             for(int currentOctave = 0; currentOctave < OctaveCount; currentOctave++)
             {

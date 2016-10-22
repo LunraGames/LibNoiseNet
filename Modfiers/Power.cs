@@ -21,6 +21,7 @@
 // 
 
 using System;
+using UnityEngine;
 
 namespace LibNoise.Modifiers
 {
@@ -39,11 +40,11 @@ namespace LibNoise.Modifiers
             PowerModule = powerModule;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (BaseModule == null || PowerModule == null)
                 throw new NullReferenceException("Base and power modules must be provided.");
-            return System.Math.Pow(BaseModule.GetValue(x, y, z), PowerModule.GetValue(x, y, z));
+            return Mathf.Pow(BaseModule.GetValue(x, y, z), PowerModule.GetValue(x, y, z));
         }
     }
 }

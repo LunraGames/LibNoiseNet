@@ -21,57 +21,51 @@
 // 
 
 using System;
+using UnityEngine;
 
 namespace LibNoise
 {
     public class RidgedMultifractal
         : GradientNoiseBasis, IModule
     {
-        public double Frequency { get; set; }
+        public float Frequency { get; set; }
         public NoiseQuality NoiseQuality { get; set; }
         public int Seed { get; set; }
-        private int mOctaveCount;
-        private double mLacunarity;
+        int mOctaveCount;
+        float mLacunarity;
 
-        private const int MaxOctaves = 30;
+        const int MaxOctaves = 30;
 
-        private double[] SpectralWeights = new double[MaxOctaves];
+        float[] SpectralWeights = new float[MaxOctaves];
 
         public RidgedMultifractal()
         {
-            Frequency = 1.0;
-            Lacunarity = 2.0;
+            Frequency = 1f;
+            Lacunarity = 2f;
             OctaveCount = 6;
             NoiseQuality = NoiseQuality.Standard;
             Seed = 0;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             x *= Frequency;
             y *= Frequency;
             z *= Frequency;
 
-            double signal = 0.0;
-            double value = 0.0;
-            double weight = 1.0;
+            var signal = 0f;
+            var value = 0f;
+            var weight = 1f;
 
             // These parameters should be user-defined; they may be exposed in a
             // future version of libnoise.
-            double offset = 1.0;
-            double gain = 2.0;
+            var offset = 1f;
+            var gain = 2f;
 
-            for (int currentOctave = 0; currentOctave < OctaveCount; currentOctave++)
+            for (var currentOctave = 0; currentOctave < OctaveCount; currentOctave++)
             {
-                //double nx, ny, nz;
-
-               /* nx = Math.MakeInt32Range(x);
-                ny = Math.MakeInt32Range(y);
-                nz = Math.MakeInt32Range(z);*/
-
-                long seed = (Seed + currentOctave) & 0x7fffffff;
-                signal = GradientCoherentNoise(x, y, z, 
-                    (int)seed, NoiseQuality);
+				long seed = (Seed + currentOctave) & 0x7fffffff;
+                signal = GradientCoherentNoise(x, y, z, (int)seed, NoiseQuality);
 
                 // Make the ridges.
                 signal = System.Math.Abs(signal);
@@ -87,14 +81,9 @@ namespace LibNoise
 
                 // Weight successive contributions by the previous signal.
                 weight = signal * gain;
-                if (weight > 1.0)
-                {
-                    weight = 1.0;
-                }
-                if (weight < 0.0)
-                {
-                    weight = 0.0;
-                }
+				// todo: isn't this just a clamp?
+                if (weight > 1f) weight = 1f;
+                if (weight < 0f) weight = 0f;
 
                 // Add the signal to the output value.
                 value += (signal * SpectralWeights[currentOctave]);
@@ -105,10 +94,10 @@ namespace LibNoise
                 z *= Lacunarity;
             }
 
-            return (value * 1.25) - 1.0;
+            return (value * 1.25f) - 1f;
         }
 
-        public double Lacunarity
+        public float Lacunarity
         {
             get { return mLacunarity; }
             set
@@ -130,15 +119,15 @@ namespace LibNoise
             }
         }
 
-        private void CalculateSpectralWeights()
+        void CalculateSpectralWeights()
         {
-            double h = 1.0;
+            var h = 1f;
 
-            double frequency = 1.0;
-            for (int i = 0; i < MaxOctaves; i++)
+            var frequency = 1f;
+            for (var i = 0; i < MaxOctaves; i++)
             {
                 // Compute weight for each frequency.
-                SpectralWeights[i] = System.Math.Pow(frequency, -h);
+                SpectralWeights[i] = Mathf.Pow(frequency, -h);
                 frequency *= mLacunarity;
             }
         }

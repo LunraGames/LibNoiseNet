@@ -27,8 +27,8 @@ namespace LibNoise.Modifiers
     public class ScaleBiasOutput
         : IModule
     {
-        public double Scale { get; set; }
-        public double Bias { get; set; }
+        public float Scale { get; set; }
+        public float Bias { get; set; }
 
         public IModule SourceModule { get; set; }
 
@@ -39,11 +39,11 @@ namespace LibNoise.Modifiers
 
             SourceModule = sourceModule;
 
-            Bias = 0.0;
-            Scale = 1.0;
+            Bias = 0f;
+            Scale = 1f;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (SourceModule == null)
                 throw new Exception("A source module must be provided.");

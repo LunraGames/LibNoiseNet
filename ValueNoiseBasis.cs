@@ -46,14 +46,15 @@ namespace LibNoise
             return (n * (n * n * 60493 + 19990303) + 1376312589) & 0x7fffffff;
         }
 
-        public double ValueNoise(int x, int y, int z)
+        public float ValueNoise(int x, int y, int z)
         {
             return ValueNoise(x, y, z, 0);
         }
 
-        public double ValueNoise(int x, int y, int z, int seed)
+        public float ValueNoise(int x, int y, int z, int seed)
         {
-            return 1.0 - ((double)IntValueNoise(x, y, z, seed) / 1073741824.0);
+			// todo: check that this won't cause floating point issues...
+            return 1f - (IntValueNoise(x, y, z, seed) / 1073741824.0f);
         }     
     }
 }

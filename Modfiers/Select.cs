@@ -31,9 +31,9 @@ namespace LibNoise.Modifiers
         public IModule SourceModule1 { get; set; }
         public IModule SourceModule2 { get; set; }
 
-        private double mEdgeFalloff;
-        public double UpperBound { get; private set; }
-        public double LowerBound { get; private set; }
+        float mEdgeFalloff;
+        public float UpperBound { get; private set; }
+        public float LowerBound { get; private set; }
 
         public Select(IModule control, IModule source1, IModule source2)
         {
@@ -44,18 +44,18 @@ namespace LibNoise.Modifiers
             SourceModule1 = source1;
             SourceModule2 = source2;
 
-            EdgeFalloff = 0.0;
-            LowerBound = -1.0;
-            UpperBound = 1.0;
+            EdgeFalloff = 0f;
+            LowerBound = -1f;
+            UpperBound = 1f;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (ControlModule == null || SourceModule1 == null || SourceModule2 == null)
                 throw new NullReferenceException("Control and source modules must be provided.");
 
-            double controlValue = ControlModule.GetValue(x, y, z);
-            double alpha;
+            var controlValue = ControlModule.GetValue(x, y, z);
+            float alpha;
 
             if (EdgeFalloff > 0.0)
             {
@@ -65,57 +65,47 @@ namespace LibNoise.Modifiers
                     // threshold; return the output value from the first source module.
                     return SourceModule1.GetValue(x, y, z);
                 }
-                else if (controlValue < (LowerBound + EdgeFalloff))
+                
+				if (controlValue < (LowerBound + EdgeFalloff))
                 {
                     // The output value from the control module is near the lower end of the
                     // selector threshold and within the smooth curve. Interpolate between
                     // the output values from the first and second source modules.
-                    double lowerCurve = (LowerBound - EdgeFalloff);
-                    double upperCurve = (LowerBound + EdgeFalloff);
+                    var lowerCurve = (LowerBound - EdgeFalloff);
+                    var upperCurve = (LowerBound + EdgeFalloff);
                     alpha = SCurve3((controlValue - lowerCurve) / (upperCurve - lowerCurve));
-                    return LinearInterpolate(SourceModule1.GetValue(x, y, z),
-                        SourceModule2.GetValue(x, y, z), alpha);
+                    return LinearInterpolate(SourceModule1.GetValue(x, y, z), SourceModule2.GetValue(x, y, z), alpha);
                 }
-                else if (controlValue < (UpperBound - EdgeFalloff))
+                
+				if (controlValue < (UpperBound - EdgeFalloff))
                 {
                     // The output value from the control module is within the selector
                     // threshold; return the output value from the second source module.
                     return SourceModule2.GetValue(x, y, z);
                 }
-                else if (controlValue < (UpperBound + EdgeFalloff))
+                
+				if (controlValue < (UpperBound + EdgeFalloff))
                 {
                     // The output value from the control module is near the upper end of the
                     // selector threshold and within the smooth curve. Interpolate between
                     // the output values from the first and second source modules.
-                    double lowerCurve = (UpperBound - EdgeFalloff);
-                    double upperCurve = (UpperBound + EdgeFalloff);
-                    alpha = SCurve3(
-                      (controlValue - lowerCurve) / (upperCurve - lowerCurve));
-                    return LinearInterpolate(SourceModule2.GetValue(x, y, z),
-                      SourceModule1.GetValue(x, y, z),
-                      alpha);
+                    var lowerCurve = (UpperBound - EdgeFalloff);
+                    var upperCurve = (UpperBound + EdgeFalloff);
+                    alpha = SCurve3((controlValue - lowerCurve) / (upperCurve - lowerCurve));
+                    return LinearInterpolate(SourceModule2.GetValue(x, y, z), SourceModule1.GetValue(x, y, z), alpha);
                 }
-                else
-                {
-                    // Output value from the control module is above the selector threshold;
-                    // return the output value from the first source module.
-                    return SourceModule1.GetValue(x, y, z);
-                }
+                
+                // Output value from the control module is above the selector threshold;
+                // return the output value from the first source module.
+                return SourceModule1.GetValue(x, y, z);
             }
-            else
-            {
-                if (controlValue < LowerBound || controlValue > UpperBound)
-                {
-                    return SourceModule1.GetValue(x, y, z);
-                }
-                else
-                {
-                    return SourceModule2.GetValue(x, y, z);
-                }
-            }
+            
+            if (controlValue < LowerBound || controlValue > UpperBound) return SourceModule1.GetValue(x, y, z);
+
+			return SourceModule2.GetValue(x, y, z);
         }
 
-        public void SetBounds(double lower, double upper)
+        public void SetBounds(float lower, float upper)
         {
             if (lower > upper)
                 throw new ArgumentException("The lower bounds must be lower than the upper bounds.");
@@ -127,13 +117,13 @@ namespace LibNoise.Modifiers
             EdgeFalloff = mEdgeFalloff;
         }
 
-        public double EdgeFalloff
+        public float EdgeFalloff
         {
             get { return mEdgeFalloff; }
             set
             {
-                double boundSize = UpperBound - LowerBound;
-                mEdgeFalloff = (value > boundSize / 2) ? boundSize / 2 : value;
+                var boundSize = UpperBound - LowerBound;
+                mEdgeFalloff = (value > boundSize / 2f) ? boundSize / 2f : value;
             }
         }
     }

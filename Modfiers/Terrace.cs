@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace LibNoise.Modifiers
 {
@@ -29,7 +30,7 @@ namespace LibNoise.Modifiers
         : Math, IModule
     {
         public IModule SourceModule { get; set; }
-        public List<double> ControlPoints = new List<double>();
+        public List<float> ControlPoints = new List<float>();
         public bool InvertTerraces { get; set; }
 
         public Terrace(IModule sourceModule)
@@ -42,7 +43,7 @@ namespace LibNoise.Modifiers
             InvertTerraces = false;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (SourceModule == null)
                 throw new NullReferenceException("A source module must be provided.");
@@ -50,25 +51,22 @@ namespace LibNoise.Modifiers
                 throw new Exception("Two or more control points must be specified.");
 
             // Get the output value from the source module.
-            double sourceModuleValue = SourceModule.GetValue(x, y, z);
+            var sourceModuleValue = SourceModule.GetValue(x, y, z);
 
-            int controlPointCount = ControlPoints.Count;
+            var controlPointCount = ControlPoints.Count;
 
             // Find the first element in the control point array that has a value
             // larger than the output value from the source module.
             int indexPos;
             for (indexPos = 0; indexPos < controlPointCount; indexPos++)
             {
-                if (sourceModuleValue < ControlPoints[indexPos])
-                {
-                    break;
-                }
+                if (sourceModuleValue < ControlPoints[indexPos]) break;
             }
 
             // Find the two nearest control points so that we can map their values
             // onto a quadratic curve.
-            int index0 = Math.ClampValue(indexPos - 1, 0, controlPointCount - 1);
-            int index1 = Math.ClampValue(indexPos, 0, controlPointCount - 1);
+			int index0 = Mathf.Clamp(indexPos - 1, 0, controlPointCount - 1);
+            int index1 = Mathf.Clamp(indexPos, 0, controlPointCount - 1);
 
             // If some control points are missing (which occurs if the output value from
             // the source module is greater than the largest value or less than the
@@ -80,12 +78,12 @@ namespace LibNoise.Modifiers
             }
 
             // Compute the alpha value used for linear interpolation.
-            double value0 = ControlPoints[index0];
-            double value1 = ControlPoints[index1];
-            double alpha = (sourceModuleValue - value0) / (value1 - value0);
+            var value0 = ControlPoints[index0];
+            var value1 = ControlPoints[index1];
+            var alpha = (sourceModuleValue - value0) / (value1 - value0);
             if (InvertTerraces)
             {
-                alpha = 1.0 - alpha;
+                alpha = 1f - alpha;
                 Math.SwapValues(ref value0, ref value1);
             }
 

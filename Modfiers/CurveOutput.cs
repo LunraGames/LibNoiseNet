@@ -27,8 +27,8 @@ namespace LibNoise.Modifiers
 {
     public struct CurveControlPoint
     {
-        public double Input;
-        public double Output;
+        public float Input;
+        public float Output;
     }
 
     public class CurveOutput
@@ -45,7 +45,7 @@ namespace LibNoise.Modifiers
             SourceModule = sourceModule;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (SourceModule == null)
                 throw new NullReferenceException("A source module must be provided.");
@@ -53,7 +53,7 @@ namespace LibNoise.Modifiers
                 throw new Exception("Four or more control points must be specified.");
 
             // Get the output value from the source module.
-            double sourceModuleValue = SourceModule.GetValue(x, y, z);
+            var sourceModuleValue = SourceModule.GetValue(x, y, z);
 
             int controlPointCount = ControlPoints.Count;
 
@@ -85,9 +85,9 @@ namespace LibNoise.Modifiers
             }
 
             // Compute the alpha value used for cubic interpolation.
-            double input0 = ControlPoints[index1].Input;
-            double input1 = ControlPoints[index2].Input;
-            double alpha = (sourceModuleValue - input0) / (input1 - input0);
+            var input0 = ControlPoints[index1].Input;
+            var input1 = ControlPoints[index2].Input;
+            var alpha = (sourceModuleValue - input0) / (input1 - input0);
 
             // Now perform the cubic interpolation given the alpha value.
             return CubicInterpolate(

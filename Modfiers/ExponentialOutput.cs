@@ -21,6 +21,7 @@
 // 
 
 using System;
+using UnityEngine;
 
 namespace LibNoise.Modifiers
 {
@@ -29,9 +30,9 @@ namespace LibNoise.Modifiers
     {
         public IModule SourceModule { get; set; }
 
-        public double Exponent { get; set; }
+        public float Exponent { get; set; }
 
-        public ExponentialOutput(IModule sourceModule, double exponent)
+        public ExponentialOutput(IModule sourceModule, float exponent)
         {
             if (sourceModule == null)
                 throw new ArgumentNullException("A source module must be provided.");
@@ -40,12 +41,12 @@ namespace LibNoise.Modifiers
             Exponent = exponent;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (SourceModule == null)
                 throw new NullReferenceException("A source module must be provided.");
 
-            return (System.Math.Pow(System.Math.Abs((SourceModule.GetValue(x, y, z) + 1.0) / 2.0), Exponent) * 2.0 - 1.0);
+            return (Mathf.Pow(Mathf.Abs((SourceModule.GetValue(x, y, z) + 1f) / 2f), Exponent) * 2f - 1f);
         }
     }
 }

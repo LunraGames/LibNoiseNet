@@ -41,22 +41,22 @@ namespace LibNoise.Models
         public bool Attenuate { get; set; }
 
         /// @a x coordinate of the start of the line segment.
-        double m_x0;
+        float m_x0;
 
         /// @a x coordinate of the end of the line segment.
-        double m_x1;
+        float m_x1;
 
         /// @a y coordinate of the start of the line segment.
-        double m_y0;
+        float m_y0;
 
         /// @a y coordinate of the end of the line segment.
-        double m_y1;
+        float m_y1;
 
         /// @a z coordinate of the start of the line segment.
-        double m_z0;
+        float m_z0;
 
         /// @a z coordinate of the end of the line segment.
-        double m_z1;
+        float m_z1;
 
         /// <summary>
         /// Initialises a new instance of the Line class.
@@ -70,41 +70,35 @@ namespace LibNoise.Models
             SourceModule = sourceModule;
 
             Attenuate = true;
-            m_x0 = 0.0;
-            m_x1 = 1.0;
-            m_y0 = 0.0;
-            m_y1 = 1.0;
-            m_z0 = 0.0;
-            m_z1 = 1.0;
+            m_x0 = 0f;
+            m_x1 = 1f;
+            m_y0 = 0f;
+            m_y1 = 1f;
+            m_z0 = 0f;
+            m_z1 = 1f;
         }
 
         /// <summary>
         /// Returns noise mapped to the given point along the length of the line.
         /// </summary>
-        public double GetValue(double p)
+        public float GetValue(float p)
         {
             if (SourceModule == null)
                 throw new NullReferenceException("A source module must be provided.");
 
-            double x = (m_x1 - m_x0) * p + m_x0;
-            double y = (m_y1 - m_y0) * p + m_y0;
-            double z = (m_z1 - m_z0) * p + m_z0;
-            double value = SourceModule.GetValue(x, y, z);
+            var x = (m_x1 - m_x0) * p + m_x0;
+            var y = (m_y1 - m_y0) * p + m_y0;
+            var z = (m_z1 - m_z0) * p + m_z0;
+            var value = SourceModule.GetValue(x, y, z);
 
-            if (Attenuate)
-            {
-                return p * (1.0 - p) * 4 * value;
-            }
-            else
-            {
-                return value;
-            }
+            if (Attenuate) return p * (1f - p) * 4f * value;
+            return value;
         }
 
         /// <summary>
         /// Sets the start point of the line in 3D space.
         /// </summary>
-        public void SetStartPoint(double x, double y, double z)
+        public void SetStartPoint(float x, float y, float z)
         {
             m_x0 = x;
             m_y0 = y;
@@ -114,7 +108,7 @@ namespace LibNoise.Models
         /// <summary>
         /// Sets the end point of the line in 3D space.
         /// </summary>
-        public void SetEndPoint(double x, double y, double z)
+        public void SetEndPoint(float x, float y, float z)
         {
             m_x1 = x;
             m_y1 = y;

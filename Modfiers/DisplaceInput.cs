@@ -43,7 +43,7 @@ namespace LibNoise.Modifiers
             ZDisplaceModule = zDisplaceModule;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (SourceModule == null || XDisplaceModule == null || YDisplaceModule == null || ZDisplaceModule == null)
                 throw new NullReferenceException("Source and X, Y, and Z displacement modules must be provided.");

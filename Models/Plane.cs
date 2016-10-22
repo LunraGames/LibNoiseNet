@@ -49,7 +49,7 @@ namespace LibNoise.Models
         /// <summary>
         /// Returns noise mapped to the given location on the plane.
         /// </summary>
-        public double GetValue(double x, double z)
+        public float GetValue(float x, float z)
         {
             if (SourceModule == null)
                 throw new NullReferenceException("A source module must be provided.");

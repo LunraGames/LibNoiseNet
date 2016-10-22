@@ -37,7 +37,7 @@ namespace LibNoise.Modifiers
             SourceModule = sourceModule;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (SourceModule == null)
                 throw new NullReferenceException("A source module must be provided.");

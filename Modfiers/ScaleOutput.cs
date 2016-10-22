@@ -29,9 +29,9 @@ namespace LibNoise.Modifiers
     {
         public IModule SourceModule { get; set; }
 
-        public double Scale { get; set; }
+        public float Scale { get; set; }
 
-        public ScaleOutput(IModule sourceModule, double scale)
+        public ScaleOutput(IModule sourceModule, float scale)
         {
             if (sourceModule == null)
                 throw new ArgumentNullException("A source module must be provided.");
@@ -40,7 +40,7 @@ namespace LibNoise.Modifiers
             Scale = scale;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (SourceModule == null)
                 throw new NullReferenceException("A source module must be provided.");

@@ -27,8 +27,8 @@ namespace LibNoise.Modifiers
     public class ClampOutput
         : IModule
     {
-        public double LowerBound { get; private set; }
-        public double UpperBound { get; private set; }
+        public float LowerBound { get; private set; }
+        public float UpperBound { get; private set; }
 
         public IModule SourceModule { get; set; }
 
@@ -43,12 +43,12 @@ namespace LibNoise.Modifiers
             UpperBound = 1;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (SourceModule == null)
                 throw new NullReferenceException("A source module must be provided.");
 
-            double value = SourceModule.GetValue(x, y, z);
+            var value = SourceModule.GetValue(x, y, z);
             if (value < LowerBound)
             {
                 return LowerBound;
@@ -63,7 +63,7 @@ namespace LibNoise.Modifiers
             }
         }
 
-        public void SetBounds(double lowerBound, double upperBound)
+        public void SetBounds(float lowerBound, float upperBound)
         {
             if (lowerBound >= upperBound)
                 throw new Exception("Lower bound must be lower than upper bound.");

@@ -21,59 +21,61 @@
 // 
 
 using System;
+using UnityEngine;
 
 namespace LibNoise
 {
     public class Voronoi
         : ValueNoiseBasis, IModule
     {
-        public double Frequency { get; set; }
-        public double Displacement { get; set; }
+        public float Frequency { get; set; }
+        public float Displacement { get; set; }
         public bool DistanceEnabled { get; set; }
         public int Seed { get; set; }
 
         public Voronoi()
         {
-            Frequency = 1.0;
-            Displacement = 1.0;
+            Frequency = 1f;
+            Displacement = 1f;
             Seed = 0;
             DistanceEnabled = false;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             x *= Frequency;
             y *= Frequency;
             z *= Frequency;
 
-            int xInt = (x > 0.0 ? (int)x : (int)x - 1);
-            int yInt = (y > 0.0 ? (int)y : (int)y - 1);
-            int zInt = (z > 0.0 ? (int)z : (int)z - 1);
+            int xInt = (x > 0f ? (int)x : (int)x - 1);
+            int yInt = (y > 0f ? (int)y : (int)y - 1);
+            int zInt = (z > 0f ? (int)z : (int)z - 1);
 
-            double minDist = 2147483647.0;
-            double xCandidate = 0;
-            double yCandidate = 0;
-            double zCandidate = 0;
+			// todo: can this be a constant? is it a max value?
+            var minDist = 2147483647.0f;
+            var xCandidate = 0f;
+            var yCandidate = 0f;
+            var zCandidate = 0f;
 
             // Inside each unit cube, there is a seed point at a random position.  Go
             // through each of the nearby cubes until we find a cube with a seed point
             // that is closest to the specified position.
-            for (int zCur = zInt - 2; zCur <= zInt + 2; zCur++)
+            for (var zCur = zInt - 2; zCur <= zInt + 2; zCur++)
             {
-                for (int yCur = yInt - 2; yCur <= yInt + 2; yCur++)
+                for (var yCur = yInt - 2; yCur <= yInt + 2; yCur++)
                 {
-                    for (int xCur = xInt - 2; xCur <= xInt + 2; xCur++)
+                    for (var xCur = xInt - 2; xCur <= xInt + 2; xCur++)
                     {
 
                         // Calculate the position and distance to the seed point inside of
                         // this unit cube.
-                        double xPos = xCur + ValueNoise(xCur, yCur, zCur, Seed);
-                        double yPos = yCur + ValueNoise(xCur, yCur, zCur, Seed + 1);
-                        double zPos = zCur + ValueNoise(xCur, yCur, zCur, Seed + 2);
-                        double xDist = xPos - x;
-                        double yDist = yPos - y;
-                        double zDist = zPos - z;
-                        double dist = xDist * xDist + yDist * yDist + zDist * zDist;
+                        var xPos = xCur + ValueNoise(xCur, yCur, zCur, Seed);
+                        var yPos = yCur + ValueNoise(xCur, yCur, zCur, Seed + 1);
+                        var zPos = zCur + ValueNoise(xCur, yCur, zCur, Seed + 2);
+                        var xDist = xPos - x;
+                        var yDist = yPos - y;
+                        var zDist = zPos - z;
+                        var dist = xDist * xDist + yDist * yDist + zDist * zDist;
 
                         if (dist < minDist)
                         {
@@ -88,27 +90,26 @@ namespace LibNoise
                 }
             }
 
-            double value;
+            float value;
             if (DistanceEnabled)
             {
                 // Determine the distance to the nearest seed point.
-                double xDist = xCandidate - x;
-                double yDist = yCandidate - y;
-                double zDist = zCandidate - z;
-                value = (System.Math.Sqrt(xDist * xDist + yDist * yDist + zDist * zDist)
-                  ) * Math.Sqrt3 - 1.0;
+                var xDist = xCandidate - x;
+                var yDist = yCandidate - y;
+                var zDist = zCandidate - z;
+                value = (Mathf.Sqrt(xDist * xDist + yDist * yDist + zDist * zDist)) * Math.Sqrt3 - 1f;
             }
             else
             {
-                value = 0.0;
+                value = 0f;
             }
 
-            int x0 = (xCandidate > 0.0 ? (int)xCandidate : (int)xCandidate - 1);
-            int y0 = (yCandidate > 0.0 ? (int)yCandidate : (int)yCandidate - 1);
-            int z0 = (zCandidate > 0.0 ? (int)zCandidate : (int)zCandidate - 1);
+            int x0 = (xCandidate > 0f ? (int)xCandidate : (int)xCandidate - 1);
+            int y0 = (yCandidate > 0f ? (int)yCandidate : (int)yCandidate - 1);
+            int z0 = (zCandidate > 0f ? (int)zCandidate : (int)zCandidate - 1);
 
             // Return the calculated distance with the displacement value applied.
-            return value + (Displacement * (double)ValueNoise(x0, y0, z0));
+            return value + (Displacement * ValueNoise(x0, y0, z0));
         }
     }
 }

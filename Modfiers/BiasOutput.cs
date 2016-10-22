@@ -38,14 +38,14 @@ namespace LibNoise.Modifiers
         /// <summary>
         /// The value to add to the output.
         /// </summary>
-        public double Bias { get; set; }
+        public float Bias { get; set; }
 
         /// <summary>
         /// Initialises a new instance of the BiasOutput class.
         /// </summary>
         /// <param name="sourceModule">The module from which to retrieve noise.</param>
         /// <param name="bias">The value to add to the output.</param>
-        public BiasOutput(IModule sourceModule, double bias)
+        public BiasOutput(IModule sourceModule, float bias)
         {
             if (sourceModule == null)
                 throw new ArgumentNullException("A source module must be provided.");
@@ -61,7 +61,7 @@ namespace LibNoise.Modifiers
         /// <param name="y"></param>
         /// <param name="z"></param>
         /// <returns></returns>
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (SourceModule == null)
                 throw new NullReferenceException("A source module must be provided.");

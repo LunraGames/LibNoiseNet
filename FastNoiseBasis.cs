@@ -27,11 +27,11 @@ namespace LibNoise
     public class FastNoiseBasis
         : Math
     {
-        private int[] RandomPermutations = new int[512];
-        private int[] SelectedPermutations = new int[512];
-        private float[] GradientTable = new float[512];
+        int[] RandomPermutations = new int[512];
+        int[] SelectedPermutations = new int[512];
+        float[] GradientTable = new float[512];
 
-        private int mSeed;
+        int mSeed;
 
         public FastNoiseBasis()
             : this(0)
@@ -46,7 +46,7 @@ namespace LibNoise
             Seed = seed;
         }
 
-        public double GradientCoherentNoise(double x, double y, double z, int seed, NoiseQuality noiseQuality)
+        public float GradientCoherentNoise(float x, float y, float z, int seed, NoiseQuality noiseQuality)
         {
             int x0 = (x > 0.0 ? (int)x : (int)x - 1);
             int y0 = (y > 0.0 ? (int)y : (int)y - 1);
@@ -56,7 +56,10 @@ namespace LibNoise
             int Y = y0 & 255;
             int Z = z0 & 255;
 
-            double u = 0, v = 0, w = 0;
+			var u = 0f;
+			var v = 0f;
+			var w = 0f;
+
             switch (noiseQuality)
             {
                 case NoiseQuality.Low:
@@ -79,12 +82,12 @@ namespace LibNoise
             int A = SelectedPermutations[X] + Y, AA = SelectedPermutations[A] + Z, AB = SelectedPermutations[A + 1] + Z,
                 B = SelectedPermutations[X + 1] + Y, BA = SelectedPermutations[B] + Z, BB = SelectedPermutations[B + 1] + Z;
 
-            double a = LinearInterpolate(GradientTable[AA], GradientTable[BA], u);
-            double b = LinearInterpolate(GradientTable[AB], GradientTable[BB], u);
-            double c = LinearInterpolate(a, b, v);
-            double d = LinearInterpolate(GradientTable[AA + 1], GradientTable[BA + 1], u);
-            double e = LinearInterpolate(GradientTable[AB + 1], GradientTable[BB + 1], u);
-            double f = LinearInterpolate(d, e, v);
+            var a = LinearInterpolate(GradientTable[AA], GradientTable[BA], u);
+            var b = LinearInterpolate(GradientTable[AB], GradientTable[BB], u);
+            var c = LinearInterpolate(a, b, v);
+            var d = LinearInterpolate(GradientTable[AA + 1], GradientTable[BA + 1], u);
+            var e = LinearInterpolate(GradientTable[AB + 1], GradientTable[BB + 1], u);
+            var f = LinearInterpolate(d, e, v);
             return LinearInterpolate(c, f, w);
         }
 
