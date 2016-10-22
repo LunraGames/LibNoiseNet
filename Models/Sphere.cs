@@ -50,12 +50,12 @@ namespace LibNoise.Models
         /// <summary>
         /// Returns noise mapped to the given location in the sphere.
         /// </summary>
-        public double GetValue(double latitude, double longitude)
+        public float GetValue(float latitude, float longitude)
         {
             if (SourceModule == null)
                 throw new NullReferenceException("A source module must be provided.");
 
-            double x=0, y=0, z=0;
+            float x = 0f, y = 0f, z = 0f;
             LatLonToXYZ(latitude, longitude, ref x, ref y, ref z);
             return SourceModule.GetValue(x, y, z);
         }

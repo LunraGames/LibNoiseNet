@@ -21,6 +21,7 @@
 // 
 
 using System;
+using UnityEngine;
 
 namespace LibNoise.Modifiers
 {
@@ -29,48 +30,48 @@ namespace LibNoise.Modifiers
     {
         public IModule SourceModule { get; set; }
 #pragma warning disable 414
-        private double XAngle;
-        private double YAngle;
-        private double ZAngle;
+        float XAngle;
+        float YAngle;
+        float ZAngle;
 #pragma warning restore 414
         /// An entry within the 3x3 rotation matrix used for rotating the
         /// input value.
-        double m_x1Matrix;
+        float m_x1Matrix;
 
         /// An entry within the 3x3 rotation matrix used for rotating the
         /// input value.
-        double m_x2Matrix;
+        float m_x2Matrix;
 
         /// An entry within the 3x3 rotation matrix used for rotating the
         /// input value.
-        double m_x3Matrix;
+        float m_x3Matrix;
 
 
         /// An entry within the 3x3 rotation matrix used for rotating the
         /// input value.
-        double m_y1Matrix;
+        float m_y1Matrix;
 
         /// An entry within the 3x3 rotation matrix used for rotating the
         /// input value.
-        double m_y2Matrix;
+        float m_y2Matrix;
 
         /// An entry within the 3x3 rotation matrix used for rotating the
         /// input value.
-        double m_y3Matrix;
+        float m_y3Matrix;
 
         /// An entry within the 3x3 rotation matrix used for rotating the
         /// input value.
-        double m_z1Matrix;
+        float m_z1Matrix;
 
         /// An entry within the 3x3 rotation matrix used for rotating the
         /// input value.
-        double m_z2Matrix;
+        float m_z2Matrix;
 
         /// An entry within the 3x3 rotation matrix used for rotating the
         /// input value.
-        double m_z3Matrix;
+		float m_z3Matrix;
 
-        public RotateInput(IModule sourceModule, double xAngle, double yAngle, double zAngle)
+        public RotateInput(IModule sourceModule, float xAngle, float yAngle, float zAngle)
         {
             if (sourceModule == null)
                 throw new ArgumentNullException("A source module must be provided.");
@@ -79,19 +80,19 @@ namespace LibNoise.Modifiers
             SetAngles(xAngle, yAngle, zAngle);
         }
 
-        public void SetAngles(double xAngle, double yAngle, double zAngle)
+		public void SetAngles(float xAngle, float yAngle, float zAngle)
         {
             XAngle = xAngle;
             YAngle = yAngle;
             ZAngle = zAngle;
 
-            double xCos, yCos, zCos, xSin, ySin, zSin;
-            xCos = System.Math.Cos(xAngle);
-            yCos = System.Math.Cos(yAngle);
-            zCos = System.Math.Cos(zAngle);
-            xSin = System.Math.Sin(xAngle);
-            ySin = System.Math.Sin(yAngle);
-            zSin = System.Math.Sin(zAngle);
+            float xCos, yCos, zCos, xSin, ySin, zSin;
+            xCos = Mathf.Cos(xAngle);
+			yCos = Mathf.Cos(yAngle);
+			zCos = Mathf.Cos(zAngle);
+			xSin = Mathf.Sin(xAngle);
+			ySin = Mathf.Sin(yAngle);
+			zSin = Mathf.Sin(zAngle);
 
             m_x1Matrix = ySin * xSin * zSin + yCos * zCos;
             m_y1Matrix = xCos * zSin;
@@ -104,14 +105,14 @@ namespace LibNoise.Modifiers
             m_z3Matrix = yCos * xCos;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (SourceModule == null)
                 throw new NullReferenceException("A source module must be provided.");
 
-            double nx = (m_x1Matrix * x) + (m_y1Matrix * y) + (m_z1Matrix * z);
-            double ny = (m_x2Matrix * x) + (m_y2Matrix * y) + (m_z2Matrix * z);
-            double nz = (m_x3Matrix * x) + (m_y3Matrix * y) + (m_z3Matrix * z);
+            var nx = (m_x1Matrix * x) + (m_y1Matrix * y) + (m_z1Matrix * z);
+            var ny = (m_x2Matrix * x) + (m_y2Matrix * y) + (m_z2Matrix * z);
+            var nz = (m_x3Matrix * x) + (m_y3Matrix * y) + (m_z3Matrix * z);
             return SourceModule.GetValue(nx, ny, nz);
         }
     }

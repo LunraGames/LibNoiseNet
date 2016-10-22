@@ -29,11 +29,11 @@ namespace LibNoise
     {
         public IModule SourceModule { get; set; }
 
-        public double Power { get; set; }
+        public float Power { get; set; }
 
-        private Perlin XDistort;
-        private Perlin YDistort;
-        private Perlin ZDistort;
+		Perlin XDistort;
+        Perlin YDistort;
+        Perlin ZDistort;
 
         public Turbulence(IModule sourceModule)
         {
@@ -46,13 +46,13 @@ namespace LibNoise
             YDistort = new Perlin();
             ZDistort = new Perlin();
 
-            Frequency = 1.0;
-            Power = 1.0;
+            Frequency = 1f;
+            Power = 1f;
             Roughness = 3;
             Seed = 0;
         }
 
-        public double Frequency
+        public float Frequency
         {
             get { return XDistort.Frequency; }
             set
@@ -61,7 +61,7 @@ namespace LibNoise
             }
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (SourceModule == null)
                 throw new NullReferenceException();
@@ -73,24 +73,21 @@ namespace LibNoise
             // when multiplied by the frequency, are near an integer boundary.  This is
             // due to a property of gradient coherent noise, which returns zero at
             // integer boundaries.
-            double x0, y0, z0;
-            double x1, y1, z1;
-            double x2, y2, z2;
-            x0 = x + (12414.0 / 65536.0);
-            y0 = y + (65124.0 / 65536.0);
-            z0 = z + (31337.0 / 65536.0);
-            x1 = x + (26519.0 / 65536.0);
-            y1 = y + (18128.0 / 65536.0);
-            z1 = z + (60493.0 / 65536.0);
-            x2 = x + (53820.0 / 65536.0);
-            y2 = y + (11213.0 / 65536.0);
-            z2 = z + (44845.0 / 65536.0);
-            double xDistort = x + (XDistort.GetValue(x0, y0, z0)
-              * Power);
-            double yDistort = y + (YDistort.GetValue(x1, y1, z1)
-              * Power);
-            double zDistort = z + (ZDistort.GetValue(x2, y2, z2)
-              * Power);
+            float x0, y0, z0;
+            float x1, y1, z1;
+            float x2, y2, z2;
+            x0 = x + (12414.0f / 65536.0f);
+            y0 = y + (65124.0f / 65536.0f);
+            z0 = z + (31337.0f / 65536.0f);
+            x1 = x + (26519.0f / 65536.0f);
+            y1 = y + (18128.0f / 65536.0f);
+            z1 = z + (60493.0f / 65536.0f);
+            x2 = x + (53820.0f / 65536.0f);
+            y2 = y + (11213.0f / 65536.0f);
+            z2 = z + (44845.0f / 65536.0f);
+            var xDistort = x + (XDistort.GetValue(x0, y0, z0) * Power);
+            var yDistort = y + (YDistort.GetValue(x1, y1, z1) * Power);
+            var zDistort = z + (ZDistort.GetValue(x2, y2, z2) * Power);
 
             // Retrieve the output value at the offsetted input value instead of the
             // original input value.

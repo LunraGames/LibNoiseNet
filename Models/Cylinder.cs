@@ -21,6 +21,7 @@
 // 
 
 using System;
+using UnityEngine;
 
 namespace LibNoise.Models
 {
@@ -49,15 +50,15 @@ namespace LibNoise.Models
         /// <summary>
         /// Returns noise mapped to the given angle and height along the cylinder.
         /// </summary>
-        public double GetValue(double angle, double height)
+        public float GetValue(float angle, float height)
         {
             if (SourceModule == null)
                 throw new NullReferenceException("A source module must be provided.");
 
-            double x, y, z;
-            x = System.Math.Cos(angle);
+            float x, y, z;
+			x = Mathf.Cos(angle);
             y = height;
-            z = System.Math.Sin(angle);
+			z = Mathf.Sin(angle);
             return SourceModule.GetValue(x, y, z);
         }
     }

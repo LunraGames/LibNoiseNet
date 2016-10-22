@@ -20,27 +20,29 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 
+using UnityEngine;
+
 namespace LibNoise
 {
     public class Spheres
         : IModule
     {
-        public double Frequency { get; set; }
+        public float Frequency { get; set; }
 
         public Spheres()
         {
-            Frequency = 1.0;
+            Frequency = 1f;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             x *= Frequency;
             y *= Frequency;
             z *= Frequency;
 
-			double distFromCenter = System.Math.Sqrt(x * x + y * y + z * z);
-			var dist = 2 - (distFromCenter % 4);
-			return (dist < 0 ? 0 - dist : dist) - 1;
+			var distFromCenter = Mathf.Sqrt(x * x + y * y + z * z);
+			var dist = 2f - (distFromCenter % 4f);
+			return (dist < 0f ? 0f - dist : dist) - 1f;
         }
     }
 }

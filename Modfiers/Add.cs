@@ -56,7 +56,7 @@ namespace LibNoise.Modifiers
         /// <summary>
         /// Returns the output of the two source modules added together.
         /// </summary>
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (SourceModule1 == null || SourceModule2 == null)
                 throw new NullReferenceException("Source modules must be provided.");

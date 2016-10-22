@@ -27,13 +27,13 @@ namespace LibNoise.Modifiers
     public class ScaleInput
         : IModule
     {
-        public double X { get; set; }
-        public double Y { get; set; }
-        public double Z { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
 
         public IModule SourceModule { get; set; }
 
-        public ScaleInput(IModule sourceModule, double x, double y, double z)
+        public ScaleInput(IModule sourceModule, float x, float y, float z)
         {
             if (sourceModule == null)
                 throw new ArgumentNullException("A source module must be provided.");
@@ -45,7 +45,7 @@ namespace LibNoise.Modifiers
             Z = z;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (SourceModule == null)
                 throw new NullReferenceException("A source module must be provided.");

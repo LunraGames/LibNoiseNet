@@ -21,6 +21,7 @@
 // 
 
 using System;
+using UnityEngine;
 
 namespace LibNoise.Modifiers
 {
@@ -50,12 +51,12 @@ namespace LibNoise.Modifiers
         /// <summary>
         /// Returns the absolute value of noise from the source module at the given coordinates.
         /// </summary>
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             if (SourceModule == null)
                 throw new NullReferenceException("A source module must be provided.");
 
-            return System.Math.Abs(SourceModule.GetValue(x, y, z));
+            return Mathf.Abs(SourceModule.GetValue(x, y, z));
         }
     }
 }

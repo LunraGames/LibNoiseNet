@@ -21,20 +21,21 @@
 // 
 
 using System;
+using UnityEngine;
 
 namespace LibNoise
 {
     public class FastRidgedMultifractal
         : FastNoiseBasis, IModule
     {
-        public double Frequency { get; set; }
+        public float Frequency { get; set; }
         public NoiseQuality NoiseQuality { get; set; }
-        private int mOctaveCount;
-        private double mLacunarity;
+		int mOctaveCount;
+        float mLacunarity;
 
-        private const int MaxOctaves = 30;
+        const int MaxOctaves = 30;
 
-        private double[] SpectralWeights = new double[MaxOctaves];
+        float[] SpectralWeights = new float[MaxOctaves];
 
         public FastRidgedMultifractal()
             : this(0)
@@ -45,28 +46,28 @@ namespace LibNoise
         public FastRidgedMultifractal(int seed)
             : base(seed)
         {
-            Frequency = 1.0;
-            Lacunarity = 2.0;
+            Frequency = 1f;
+            Lacunarity = 2f;
             OctaveCount = 6;
             NoiseQuality = NoiseQuality.Standard;
         }
 
-        public double GetValue(double x, double y, double z)
+        public float GetValue(float x, float y, float z)
         {
             x *= Frequency;
             y *= Frequency;
             z *= Frequency;
 
-            double signal = 0.0;
-            double value = 0.0;
-            double weight = 1.0;
+            var signal = 0f;
+            var value = 0f;
+            var weight = 1f;
 
             // These parameters should be user-defined; they may be exposed in a
             // future version of libnoise.
-            double offset = 1.0;
-            double gain = 2.0;
+            var offset = 1f;
+            var gain = 2f;
 
-            for (int currentOctave = 0; currentOctave < OctaveCount; currentOctave++)
+            for (var currentOctave = 0; currentOctave < OctaveCount; currentOctave++)
             {
  
                 long seed = (Seed + currentOctave) & 0x7fffffff;
@@ -86,13 +87,13 @@ namespace LibNoise
 
                 // Weight successive contributions by the previous signal.
                 weight = signal * gain;
-                if (weight > 1.0)
+                if (weight > 1f)
                 {
-                    weight = 1.0;
+                    weight = 1f;
                 }
-                if (weight < 0.0)
+                if (weight < 0f)
                 {
-                    weight = 0.0;
+                    weight = 0f;
                 }
 
                 // Add the signal to the output value.
@@ -104,10 +105,10 @@ namespace LibNoise
                 z *= Lacunarity;
             }
 
-            return (value * 1.25) - 1.0;
+            return (value * 1.25f) - 1f;
         }
 
-        public double Lacunarity
+        public float Lacunarity
         {
             get { return mLacunarity; }
             set
@@ -129,15 +130,15 @@ namespace LibNoise
             }
         }
 
-        private void CalculateSpectralWeights()
+        void CalculateSpectralWeights()
         {
-            double h = 1.0;
+            var h = 1f;
 
-            double frequency = 1.0;
-            for (int i = 0; i < MaxOctaves; i++)
+            var frequency = 1f;
+            for (var i = 0; i < MaxOctaves; i++)
             {
                 // Compute weight for each frequency.
-                SpectralWeights[i] = System.Math.Pow(frequency, -h);
+                SpectralWeights[i] = Mathf.Pow(frequency, -h);
                 frequency *= mLacunarity;
             }
         }

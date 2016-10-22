@@ -20,7 +20,7 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 
-using System;
+using UnityEngine;
 
 namespace LibNoise
 {
@@ -39,14 +39,11 @@ namespace LibNoise
             {
                 return lowerBound;
             }
-            else if (value > upperBound)
+            if (value > upperBound)
             {
                 return upperBound;
             }
-            else
-            {
-                return value;
-            }
+            return value;
         }
 
         /// <summary>
@@ -58,19 +55,19 @@ namespace LibNoise
         /// <param name="n3">The value after the second value.</param>
         /// <param name="a">The alpha value.</param>
         /// <returns></returns>
-        protected double CubicInterpolate(double n0, double n1, double n2, double n3, double a)
+        protected float CubicInterpolate(float n0, float n1, float n2, float n3, float a)
         {
-            double p = (n3 - n2) - (n0 - n1);
-            double q = (n0 - n1) - p;
-            double r = n2 - n0;
-            double s = n1;
+            var p = (n3 - n2) - (n0 - n1);
+            var q = (n0 - n1) - p;
+            var r = n2 - n0;
+            var s = n1;
             return p * a * a * a + q * a * a + r * a + s;
         }
 
         /// <summary>
         /// Returns the smaller of the two given numbers.
         /// </summary>
-        public static double GetSmaller(double a, double b)
+        public static float GetSmaller(float a, float b)
         {
             return (a < b ? a : b);
         }
@@ -78,7 +75,7 @@ namespace LibNoise
         /// <summary>
         /// Returns the larger of the two given numbers.
         /// </summary>
-        public static double GetLarger(double a, double b)
+        public static float GetLarger(float a, float b)
         {
             return (a > b ? a : b);
         }
@@ -86,9 +83,9 @@ namespace LibNoise
         /// <summary>
         /// Swaps the values contained by the two given variables.
         /// </summary>
-        public static void SwapValues(ref double a, ref double b)
+        public static void SwapValues(ref float a, ref float b)
         {
-            double c = a;
+            var c = a;
             a = b;
             b = c;
         }
@@ -96,53 +93,34 @@ namespace LibNoise
         /// <summary>
         /// Returns the linear interpolation of two values with the given alpha.
         /// </summary>
-        protected double LinearInterpolate(double n0, double n1, double a)
+        protected float LinearInterpolate(float n0, float n1, float a)
         {
-            return ((1.0 - a) * n0) + (a * n1);
+            return ((1f - a) * n0) + (a * n1);
         }
-
-        /// <summary>
-        /// Returns the given value, modified to be able to fit into a 32-bit integer.
-        /// </summary>
-        /*public double MakeInt32Range(double n)
-        {
-            if (n >= 1073741824.0)
-            {
-                return ((2.0 * System.Math.IEEERemainder(n, 1073741824.0)) - 1073741824.0);
-            }
-            else if (n <= -1073741824.0)
-            {
-                return ((2.0 * System.Math.IEEERemainder(n, 1073741824.0)) + 1073741824.0);
-            }
-            else
-            {
-                return n;
-            }
-        }*/
 
         /// <summary>
         /// Returns the given value mapped onto a cubic S-curve.
         /// </summary>
-        protected double SCurve3(double a)
+        protected float SCurve3(float a)
         {
-            return (a * a * (3.0 - 2.0 * a));
+            return (a * a * (3f - 2f * a));
         }
 
         /// <summary>
         /// Returns the given value mapped onto a quintic S-curve.
         /// </summary>
-        protected double SCurve5(double a)
+        protected float SCurve5(float a)
         {
-            double a3 = a * a * a;
-            double a4 = a3 * a;
-            double a5 = a4 * a;
-            return (6.0 * a5) - (15.0 * a4) + (10.0 * a3);
+            var a3 = a * a * a;
+            var a4 = a3 * a;
+            var a5 = a4 * a;
+            return (6f * a5) - (15f * a4) + (10f * a3);
         }
 
         /// <summary>
         /// Returns the value of the mathematical constant PI.
         /// </summary>
-        public static readonly double PI = 3.1415926535897932385;
+        public static readonly float PI = 3.1415926535897932385f;
 
         /// <summary>
         /// Returns the square root of 2.
@@ -152,23 +130,23 @@ namespace LibNoise
         /// <summary>
         /// Returns the square root of 3.
         /// </summary>
-        public static readonly double Sqrt3 = 1.7320508075688772935;
+        public static readonly float Sqrt3 = 1.7320508075688772935f;
 
         /// <summary>
         /// Returns PI/180.0, used for converting degrees to radians.
         /// </summary>
-        public static readonly double DEG_TO_RAD = PI / 180.0;
+        public static readonly float DEG_TO_RAD = PI / 180.0f;
 
         /// <summary>
         /// Provides the X, Y, and Z coordinates on the surface of a sphere 
         /// cooresponding to the given latitude and longitude.
         /// </summary>
-        protected void LatLonToXYZ(double lat, double lon, ref double x, ref double y, ref double z)
+        protected void LatLonToXYZ(float lat, float lon, ref float x, ref float y, ref float z)
         {
-          double r = System.Math.Cos (DEG_TO_RAD * lat);
-          x = r * System.Math.Cos(DEG_TO_RAD * lon);
-          y = System.Math.Sin(DEG_TO_RAD * lat);
-          z = r * System.Math.Sin(DEG_TO_RAD * lon);
+        	var r = Mathf.Cos (DEG_TO_RAD * lat);
+			x = r * Mathf.Cos(DEG_TO_RAD * lon);
+			y = Mathf.Sin(DEG_TO_RAD * lat);
+			z = r * Mathf.Sin(DEG_TO_RAD * lon);
         }
     }
 }
