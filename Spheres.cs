@@ -24,8 +24,7 @@ using UnityEngine;
 
 namespace LibNoise
 {
-    public class Spheres
-        : IModule
+    public class Spheres : IModule
     {
         public float Frequency { get; set; }
 

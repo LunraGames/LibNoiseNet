@@ -25,8 +25,7 @@ using UnityEngine;
 
 namespace LibNoise
 {
-    public class Voronoi
-        : ValueNoiseBasis, IModule
+    public class Voronoi : ValueNoiseBasis, IModule
     {
         public float Frequency { get; set; }
         public float Displacement { get; set; }
