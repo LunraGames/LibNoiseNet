@@ -17,18 +17,18 @@ namespace LibNoise
 
 	public class Textured : IModule
 	{
-		public Texture2D Texture { get; set; }
+		public Color[][] Texture { get; set; }
 		public TextureChannels Channel { get; set; }
 		public Color DefaultColor { get; set; }
 
 		public float GetValue(float x, float y, float z)
 		{
-			if (Texture == null) return CalculateValue(DefaultColor);
+			if (Texture == null || Texture.Length == 0 || Texture[0].Length == 0) return CalculateValue(DefaultColor);
+			 
+			var pixelX = Mathf.FloorToInt(Mathf.Abs(x)) % Texture.Length;
+			var pixelY = Mathf.FloorToInt(Mathf.Abs(y)) % Texture[0].Length;
 
-			var pixelX = Mathf.FloorToInt(x) % Texture.width;
-			var pixelY = Mathf.FloorToInt(y) % Texture.height;
-
-			return CalculateValue(Texture.GetPixel(pixelX, pixelY));
+			return CalculateValue(Texture[pixelX][pixelY]);
 		}
 
 		float CalculateValue(Color color)
