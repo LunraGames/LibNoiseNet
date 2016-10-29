@@ -20,8 +20,6 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 
-using System;
-
 namespace LibNoise
 {
     public enum NoiseQuality
