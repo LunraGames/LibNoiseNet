@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using LunraGames;
 
 namespace LibNoise
 {
@@ -37,12 +36,19 @@ namespace LibNoise
 			// but restrain yourself, since it will print a million errors.
 			switch (Channel)
 			{
-				case TextureChannels.Luminosity: return color.GetV();
-				case TextureChannels.Red: return color.r;
-				case TextureChannels.Green: return color.g;
-				case TextureChannels.Blue: return color.b;
-				case TextureChannels.Alpha: return color.a;
-				default: return 0f;
+				case TextureChannels.Luminosity:
+					Color.RGBToHSV(color, out _, out _, out var v);
+					return v;
+				case TextureChannels.Red:
+					return color.r;
+				case TextureChannels.Green:
+					return color.g;
+				case TextureChannels.Blue:
+					return color.b;
+				case TextureChannels.Alpha:
+					return color.a;
+				default:
+					return 0f;
 			}
 		}
 	}
